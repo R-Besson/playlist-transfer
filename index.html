@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Playlist Porter</title>
+    <title>Playlist Transfer</title>
     <link rel="stylesheet" href="style.css">
     
     <!-- Modern Google Identity Services (GIS) library -->
@@ -24,25 +24,56 @@
                     </div>
                 </label>
             </div>
-            <h1 id="home-link" class="clickable">Playlist Porter</h1>
-            <p id="header-subtitle">Transfer your playlists between services.</p>
+            <h1 id="home-link" class="clickable">Playlist Transfer</h1>
+            <p id="header-subtitle">Transfer your playlists between services.<br>Check out the <a href="https://github.com/R-Besson/playlist-transfer" target="_blank">GitHub Repository</a><br>Made by <a href="https://github.com/R-Besson" target="_blank">r-besson</a></p>
         </header>
 
         <main id="view-source-select" class="view visible">
-            <h2>Step 1: Select Source Playlist</h2>
+            <h2>Step 1: Select Source</h2>
             <div class="form-group">
                 <label for="source-service">Source Service:</label>
                 <select id="source-service">
                     <option value="spotify">Spotify</option>
                     <option value="youtube">YouTube</option>
+                    <option value="applemusic">Apple Music</option>
+                    <option value="text">Text / Clipboard</option>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="source-url-container">
                 <label for="source-url">Playlist URL:</label>
                 <input type="text" id="source-url" placeholder="Paste your playlist URL here">
                 <p class="field-note">Note: The source playlist must be set to <strong>public</strong>.</p>
             </div>
+            <div class="form-group" id="source-text-container" style="display: none;">
+                <label for="source-text">Playlist Text:</label>
+                <textarea id="source-text" rows="10" placeholder="Paste your song list here, one per line (e.g., Artist - Title)"></textarea>
+                <p class="field-note">Provide a list of songs, one per line. The format "Artist - Title" is recommended for best results.</p>
+            </div>
             <button id="btn-source-next">Next →</button>
+        </main>
+        
+        <main id="view-am-fetch" class="view">
+            <h2>Step 1.5: Fetch Apple Music Data</h2>
+            <div class="instructions">
+                <p>Action Required:</p>
+                <ol>
+                    <li>Open a new tab and go to <a href="https://music.apple.com" target="_blank">music.apple.com</a> and log in.</li>
+                    <li>Open the Developer Console (F12 or Ctrl+Shift+I).</li>
+                    <li>Copy the code below and paste it into the console, then press Enter.</li>
+                    <li>A pop-up will appear on the page. Click the "Copy Data" button.</li>
+                    <li>Return to this tab, paste the copied data into the text box below, and click Continue.</li>
+                </ol>
+            </div>
+            <div id="am-fetch-code-container" class="code-block" style="margin-bottom: 1.5rem;">
+                <button class="copy-button">Copy Code</button>
+                <pre id="am-fetch-code"></pre>
+            </div>
+            <div class="form-group">
+                <label for="am-paste-data">Paste Playlist Data Here:</label>
+                <textarea id="am-paste-data" rows="5" placeholder="Paste the data you copied from Apple Music here..."></textarea>
+            </div>
+            <button id="btn-am-fetch-continue">Continue →</button>
+            <button id="btn-am-fetch-back">← Back</button>
         </main>
 
         <main id="view-destination-select" class="view">
@@ -51,6 +82,7 @@
                 <div class="card" data-service="spotify">Spotify</div>
                 <div class="card" data-service="youtube">YouTube</div>
                 <div class="card" data-service="applemusic">Apple Music</div>
+                <div class="card" data-service="text">Text File</div>
             </div>
             <button id="btn-dest-back">← Back</button>
         </main>
@@ -85,7 +117,7 @@
                 <div id="destination-creds-form"></div>
             </div>
             
-            <button id="btn-login-and-transfer">Login and Transfer</button>
+            <button id="btn-login-and-transfer">Authenticate and Prepare</button>
             <button id="btn-creds-back">← Back</button>
         </main>
         
@@ -105,7 +137,6 @@
                     <ol>
                         <li>Go to the <a href="https://developer.spotify.com/dashboard/" target="_blank">Spotify Developer Dashboard</a> and log in.</li>
                         <li>Click <strong>Create App</strong>. Give it any name and description.</li>
-                        <li>Once created, copy your <strong>Client ID</strong>.</li>
                         <li>Click <strong>Edit Settings</strong>. In <strong>Redirect URIs</strong>, you MUST add your app's address (e.g., <code>http://127.0.0.1:5500</code>).</li>
                     </ol>
                 </div>
@@ -116,9 +147,7 @@
                     <ol>
                         <li>Go to the <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a> and create a project.</li>
                         <li>Go to <strong>APIs & Services</strong> > <strong>Library</strong>. Search for and <strong>Enable</strong> the <strong>YouTube Data API v3</strong>.</li>
-                        <li>Go to <strong>APIs & Services</strong> > <strong>Credentials</strong>.</li>
-                        <li>Click <strong>+ CREATE CREDENTIALS</strong> and choose <strong>API Key</strong>.</li>
-                        <li>Copy the API Key into the field below.</li>
+                        <li>Go to <strong>APIs & Services</strong> > <strong>Credentials</strong>. Click <strong>+ CREATE CREDENTIALS</strong> and choose <strong>API Key</strong>.</li>
                     </ol>
                 </div>
             </div>
@@ -128,26 +157,24 @@
                     <ol>
                         <li>Go to the <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a> and create a project.</li>
                         <li>Go to <strong>APIs & Services</strong> > <strong>Library</strong>. Search for and <strong>Enable</strong> the <strong>YouTube Data API v3</strong>.</li>
-                        <li>Go to <strong>APIs & Services</strong> > <strong>OAuth consent screen</strong> and add your email as a <strong>Test User</strong>.</li>
+                        <li>Go to <strong>APIs & Services</strong> > <strong>OAuth consent screen</strong> > <strong>Audience</strong> and add your email as a <strong>Test User</strong>.</li>
                         <li>Go to <strong>APIs & Services</strong> > <strong>Credentials</strong> and click <strong>+ CREATE CREDENTIALS</strong>.</li>
                         <li>Create an <strong>API Key</strong>.</li>
-                        <li>Create an <strong>OAuth client ID</strong> for a <strong>Web application</strong> and add your app's address (e.g., <code>http://127.0.0.1:5500</code>) to both <strong>Authorized JavaScript origins</strong> and <strong>Authorized redirect URIs</strong>.</li>
-                        <li>Copy the <strong>API Key</strong> and the <strong>Client ID</strong> into the fields below.</li>
+                        <li>Create an <strong>OAuth client ID</strong> for a <strong>Web application</strong> and add this page's address (e.g., <code>https://r-besson.github.io/playlist-transfer/</code>) to both <strong>Authorized JavaScript origins</strong> and <strong>Authorized redirect URIs</strong>.</li>
                     </ol>
                 </div>
             </div>
             <div id="instructions-applemusic-destination-template">
                 <div class="instructions">
-                    <p>How to get your Apple Music Credentials (Advanced):</p>
+                    <p>Apple Music Transfer (Advanced Console Method):</p>
                     <ol>
                         <li>In your web browser, open a new tab and go to <a href="https://music.apple.com" target="_blank">music.apple.com</a> and log in. <strong>This is required.</strong></li>
-                        <li>Open the Developer Tools (press F12 or Ctrl+Shift+I).</li>
+                        <li>Open the Developer Tools (press F12 or Ctrl+Shift+i).</li>
                         <li>Go to the <strong>Network</strong> tab. In the filter box, type <code>amp-api</code>.</li>
-                        <li>Refresh the page. Click on any request in the list (e.g., "history").</li>
-                        <li>In the new panel, find the <strong>Request Headers</strong> section.</li>
-                        <li>Find and copy the entire value for the <strong>authorization</strong> header (it starts with "Bearer ey..."). This is your Bearer Token.</li>
-                        <li>Find and copy the value for the <strong>media-user-token</strong> header.</li>
-                        <li>Enter your two-letter <a href="https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes" target="_blank">country code</a> (e.g., US, GB, DE).</li>
+                        <li>Refresh the page. Click on any request in the list and go to <strong>Headers</strong> > <strong>Request Headers</strong>.</li>
+                        <li>Keep clicking other requests until you see the following headers:</li>
+                        <li>Copy the entire value for the <strong>authorization</strong> header (it starts with "Bearer ...").</li>
+                        <li>Copy the entire value for the <strong>media-user-token</strong> header.</li>
                     </ol>
                 </div>
             </div>

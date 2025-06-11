@@ -20,6 +20,10 @@
     --log-border: #e8eaed;
     --loader-track: #e8eaed;
     --shadow-color: rgba(32, 33, 36, 0.08);
+    --code-bg: var(--input-bg);
+    --code-text: var(--text-color);
+    --scrollbar-track-bg: #f1f1f1;
+    --scrollbar-thumb-bg: #c1c1c1;
 }
 
 [data-theme="dark"] {
@@ -37,6 +41,10 @@
     --log-border: #3c4043;
     --loader-track: #3c4043;
     --shadow-color: rgba(0, 0, 0, 0.25);
+    --code-bg: #1e1e1e;
+    --code-text: #d4d4d4;
+    --scrollbar-track-bg: #2d2e30;
+    --scrollbar-thumb-bg: #5f6368;
 }
 
 * {
@@ -86,6 +94,8 @@ h4 { margin-bottom: 1rem; }
 h1, h2, h4 { margin-top: 0; }
 h1 { color: var(--primary-color); margin-bottom: 0.25rem; }
 #header-subtitle { color: var(--text-secondary-color); margin-top: 0; }
+a { color: var(--primary-color); text-decoration: none;}
+a:hover { color: var(--primary-hover); }
 
 .form-group {
     margin-bottom: 1.5rem;
@@ -97,7 +107,7 @@ label {
     font-weight: 500;
 }
 
-input[type="text"], input[type="password"], select {
+input[type="text"], input[type="password"], select, textarea {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid var(--border-color);
@@ -106,8 +116,10 @@ input[type="text"], input[type="password"], select {
     box-sizing: border-box;
     background-color: var(--input-bg);
     color: var(--text-color);
+    font-family: inherit;
+    resize: vertical;
 }
-input:focus, select:focus {
+input:focus, select:focus, textarea:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px var(--input-focus-glow);
@@ -122,7 +134,8 @@ p.field-note.warning {
     background-color: rgba(252, 186, 3, 0.1);
     border-left: 3px solid #fcba03;
     padding: 0.75rem;
-    margin-top: 0;
+    margin-top: 1rem;
+    border-radius: 4px;
 }
 
 button {
@@ -183,7 +196,6 @@ button[id*="back"]:hover, button#btn-start-over:hover { background-color: var(--
 .instructions p { font-weight: bold; margin-top: 0; }
 .instructions ol { padding-left: 20px; margin: 0; }
 .instructions li { margin-bottom: 0.5rem; }
-.instructions a { color: var(--primary-color); font-weight: 500; }
 .instructions ul { list-style-type: disc; margin-top: 0.5rem; padding-left: 20px;}
 .instructions code {
     background-color: rgba(128, 128, 128, 0.2);
@@ -220,6 +232,35 @@ button[id*="back"]:hover, button#btn-start-over:hover { background-color: var(--
 #track-log .success::before { content: '✔ '; color: #1e8e3e; }
 #track-log .error::before { content: '✖ '; color: #d93025; }
 #track-log .info::before { content: 'ℹ️ '; }
+#track-log details {
+    margin-top: 0.5rem;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+#track-log summary {
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+}
+#track-log details ul {
+    list-style-type: none;
+    padding-left: 1rem;
+    margin-top: 0.5rem;
+}
+#track-log details li {
+    font-size: 0.9em;
+    padding: 0.2rem 0;
+    border: none;
+    opacity: 1;
+    animation: none;
+}
+#track-log details li::before {
+    content: '• ';
+    color: var(--text-secondary-color);
+}
+
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -235,7 +276,6 @@ button[id*="back"]:hover, button#btn-start-over:hover { background-color: var(--
     transform: translateY(0);
 }
 
-/* Theme & Setting Switchers */
 .theme-switch-wrapper {
     position: absolute;
     top: -10px; right: -15px;
@@ -288,3 +328,57 @@ input:checked + .slider:before { transform: translateX(26px); }
 input:checked + .slider .feather-sun { opacity: 0; }
 input:checked + .slider .feather-moon { opacity: 1; }
 [data-theme="dark"] .slider { background-color: #5f6368; }
+
+.code-block {
+    position: relative;
+    background-color: var(--code-bg);
+    border-radius: 6px;
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+}
+.code-block pre {
+    color: var(--code-text);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 250px;
+    overflow-y: auto;
+    margin: 0;
+    font-family: "SF Mono", "Fira Code", Consolas, "Courier New", monospace;
+    font-size: 0.85em;
+}
+.copy-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    background-color: var(--secondary-color);
+    margin: 0;
+}
+.copy-button:hover {
+    background-color: var(--secondary-hover);
+}
+
+/* Prettified Scrollbars */
+pre::-webkit-scrollbar,
+#track-log::-webkit-scrollbar,
+textarea::-webkit-scrollbar {
+  width: 8px;
+}
+pre::-webkit-scrollbar-track,
+#track-log::-webkit-scrollbar-track,
+textarea::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-bg);
+}
+pre::-webkit-scrollbar-thumb,
+#track-log::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-bg);
+  border-radius: 4px;
+}
+pre::-webkit-scrollbar-thumb:hover,
+#track-log::-webkit-scrollbar-thumb:hover,
+textarea::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}
