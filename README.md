@@ -1,5 +1,5 @@
 # Hey!
 ## Do you want to transfer a playlist (Apple, Spotify, YouTube, or even a simple text file with songs) to another service?
-You've come to the right place! Click on the link above and to the right or (click here)[https://r-besson.github.io/playlist-transfer/]
+You've come to the right place! Click on the link above and to the right or [click here](https://r-besson.github.io/playlist-transfer/)
 
-[<img src="preview.jpg">]([http://example.com/](https://r-besson.github.io/playlist-transfer/))
+[<img src="preview.jpg">](https://r-besson.github.io/playlist-transfer/)
