@@ -88,7 +88,7 @@ const _parseISODuration = (isoDuration) => {
 	return (hours * 3600 + minutes * 60 + seconds) * 1000;
 };
 
-const API = {
+let API = {
 	spotify: {
 		accessToken: null,
 		clientId: null,
@@ -158,7 +158,7 @@ const API = {
 		setAccessToken(token) {
 			this.accessToken = token;
 		},
-		async _fetch(endpoint, method = "GET", body = null, logFn = () => {}) {
+		async _fetch(endpoint, method = "GET", body = null, logFn = () => { }) {
 			if (!this.accessToken)
 				throw new Error("Spotify access token is missing.");
 			while (true) {
@@ -560,8 +560,7 @@ const API = {
 					});
 				} catch (e) {
 					logFn(
-						`Failed to add video ${i + 1}/${
-							foundVideos.length
+						`Failed to add video ${i + 1}/${foundVideos.length
 						}. It may already be in the playlist or another issue occurred.`,
 						"error"
 					);
@@ -741,10 +740,9 @@ const API = {
 				} catch (error) {
 					console.error("Failed to fetch Apple Music playlist:", error);
 					const errorMsg = error.status
-						? `Error ${error.status}: ${
-								error.response?.errors?.[0]?.title ||
-								"Please check tokens and URL."
-						  }`
+						? `Error ${error.status}: ${error.response?.errors?.[0]?.title ||
+						"Please check tokens and URL."
+						}`
 						: error.message;
 					showModal(
 						`<h3 style="color: #ff3b30;">Error!</h3><p>${errorMsg}</p><p style="font-size:12px; color:#888;">(Ensure you are logged in and the tokens/URL are correct)</p>`
@@ -937,8 +935,7 @@ const API = {
 					const promises = batch.map(async (track, j) => {
 						const index = i + j;
 						console.log(
-							`[${index + 1}/${tracks.length}] Searching for: ${
-								track.title
+							`[${index + 1}/${tracks.length}] Searching for: ${track.title
 							} - ${track.artist}`
 						);
 						const searchTerm = `${_cleanString(track.artist)} ${_cleanString(

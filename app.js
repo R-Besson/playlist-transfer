@@ -132,8 +132,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		destCards.forEach(
 			(card) =>
-				(card.style.display =
-					card.dataset.service !== appState.source.service ? "block" : "none")
+			(card.style.display =
+				card.dataset.service !== appState.source.service ? "block" : "none")
 		);
 		showView("view-destination-select");
 	});
@@ -214,7 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					"instructions-applemusic-destination-template"
 				);
 				sourceCredsForm.innerHTML = `<label for="source-apple-bearer">Bearer Token</label><input type="password" id="source-apple-bearer" placeholder="Starts with 'Bearer ...'">
-                                        <label for="source-apple-media-user">Media User Token</label><input type="password" id="source-apple-media-user" placeholder="Your Media User Token">`;
+										<label for="source-apple-media-user">Media User Token</label><input type="password" id="source-apple-media-user" placeholder="Your Media User Token">`;
 			}
 		}
 
@@ -246,13 +246,13 @@ document.addEventListener("DOMContentLoaded", () => {
 					"instructions-youtube-destination-template"
 				);
 				destinationCredsForm.innerHTML = `<label for="dest-youtube-api-key">API Key</label><input type="text" id="dest-youtube-api-key" placeholder="YouTube API Key">
-                                            <label for="dest-youtube-client-id">Client ID</label><input type="text" id="dest-youtube-client-id" placeholder="YouTube OAuth Client ID">`;
+											<label for="dest-youtube-client-id">Client ID</label><input type="text" id="dest-youtube-client-id" placeholder="YouTube OAuth Client ID">`;
 			} else if (destination.service === "applemusic") {
 				destinationInstructionsContainer.innerHTML = getTemplate(
 					"instructions-applemusic-destination-template"
 				);
 				destinationCredsForm.innerHTML = `<label for="dest-apple-bearer">Bearer Token</label><input type="password" id="dest-apple-bearer" placeholder="Starts with 'Bearer ...'">
-                                              <label for="dest-apple-media-user">Media User Token</label><input type="password" id="dest-apple-media-user" placeholder="Your Media User Token">`;
+											  <label for="dest-apple-media-user">Media User Token</label><input type="password" id="dest-apple-media-user" placeholder="Your Media User Token">`;
 			}
 		}
 	};
@@ -302,7 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				destination.playlistName = newPlaylistNameInput.value;
 			}
 			destination.fastTransfer = fastTransferCheckbox.checked;
-		} catch (e) {}
+		} catch (e) { }
 
 		const isInvalid =
 			// Playlist name is required only if destination is NOT text
@@ -455,9 +455,9 @@ document.addEventListener("DOMContentLoaded", () => {
 				progressTitle.textContent = "Export Complete!";
 				progressText.innerHTML = `Your playlist is ready. Copy the text below.`;
 				trackLog.innerHTML = `<div class="code-block">
-                    <button class="copy-button">Copy</button>
-                    <pre>${textOutput}</pre>
-                 </div>`;
+					<button class="copy-button">Copy</button>
+					<pre>${textOutput}</pre>
+				 </div>`;
 				const copyBtn = trackLog.querySelector(".copy-button");
 				copyBtn.addEventListener("click", function () {
 					navigator.clipboard.writeText(textOutput);
@@ -530,9 +530,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	const handleError = (error) => {
 		console.error("Transfer Error:", error);
 		progressTitle.textContent = "Transfer Failed";
-		let finalErrorMessage = `Error: ${
-			error.message || "An unknown error occurred."
-		}`;
+		let finalErrorMessage = `Error: ${error.message || "An unknown error occurred."
+			}`;
 		if (
 			error &&
 			error.result &&
